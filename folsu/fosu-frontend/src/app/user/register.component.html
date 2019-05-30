@@ -1,0 +1,85 @@
+<div class="card" style="max-width: 50rem;">
+  <div class="card-header text-white bg-dark">User <i class="fa fa-arrow-right"></i> Register</div>
+  <div class="card-body">
+    <div *ngIf="notification.showNotices" class="alert alert-success">{{ notification.notices }}</div>
+    <div *ngIf="notification.showErrors" class="alert alert-danger">{{ notification.errors }}</div>
+    <form [formGroup]="form">
+      <div class="form-group">
+        <input class="form-control" placeholder="First name" formControlName="fname">
+        <div *ngIf="!form.get('fname').value && !form.get('fname').pristine" class="alert alert-danger">
+          First name is require
+        </div>
+      </div>
+      <div class="form-group">
+        <input class="form-control" placeholder="Last Name" formControlName="lname">
+        <div *ngIf="!form.get('lname').value && !form.get('lname').pristine" class="alert alert-danger">
+            Last name is require
+        </div>
+      </div>
+      <div class="form-group">
+        <input class="form-control" placeholder="Email" type="email" formControlName="email">
+        <div *ngIf="!form.get('email').value && !form.get('email').pristine" class="alert alert-danger">
+            Email is require
+        </div>
+        <div *ngIf="form.get('email').errors?.email && !form.get('email').pristine" class="alert alert-danger" >
+            Email not valid.
+       </div>
+      </div>  
+      <div class="form-group">
+        <input class="form-control" type="password" placeholder="Password" formControlName="password">
+        <div *ngIf="!form.get('password').value && !form.get('password').pristine" class="alert alert-danger">
+            Password is require
+        </div>
+      </div>
+      <div class="form-group">
+        <input class="form-control" placeholder="Salary" type="number" formControlName="salary" style="max-width: 140px;">
+        <div *ngIf="!form.get('salary').value && !form.get('salary').pristine" class="alert alert-danger">
+            Salary is require
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="col">
+          <select class="form-control" formControlName="role">
+            <option value="" disabled selected>select a role</option>
+            <option *ngFor="let item of roles" [value]="item._id">{{ item.name }}</option>
+          </select>
+        </div>
+        <div class="col">
+          <select class="form-control" formControlName="company">
+            <option value="" disabled selected>select a company</option>
+            <option *ngFor="let item of companies" [value]="item._id">{{ item.name }}</option>
+          </select>
+        </div>
+      </div>
+      <br>
+      <div class="row">
+        <div class="col-md-6">
+          <select class="form-control" formControlName="project">
+            <option value="" disabled selected>select a project</option>
+            <option *ngFor="let item of projects" [value]="item._id">{{ item.name }}</option>
+          </select>
+        </div>
+      </div>
+
+      <!--<div class="form-group">
+        <input class="form-control" type="password" placeholder="Confirm Password" formControlName="confirmPassword">
+        <div *ngIf="!form.get('confirmPassword').value && !form.get('confirmPassword').pristine" class="alert alert-danger">
+            Confirm password is require
+        </div>
+      </div>-->
+      <br>
+      <button class="btn btn-primary" (click)="submit()" [disabled]="!form.valid">Register</button>
+      &nbsp;&nbsp;
+      <button class="btn btn-light" (click)="rebuildForm()">Reset</button>
+    </form>
+
+  </div>
+
+</div>
+
+<!--
+<p>Form value: {{ form.value | json }}</p>
+<p>Form status: {{ form.status | json }}</p>
+<p>Name value: {{ form.get('fname').value }}</p>
+<p>Name status: {{ form.get('fname').status }}</p>
+-->

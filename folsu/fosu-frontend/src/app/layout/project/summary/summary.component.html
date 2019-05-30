@@ -1,0 +1,124 @@
+<div class="container-fluid">
+<div class="row">
+    <a [routerLink]="['/projects']">
+        <i class="fa fa-arrow-left"></i><span class="pull-left">Back</span>
+    </a>
+    
+    <div class="card border-success" style="max-width: 30rem;">
+        <div class="card-header bg-success">Last shipments</div>
+        <div class="card-body text-secondary">
+            <ng-container *ngIf="lastShipments.length; else NOLIST">
+                <table class="table table-borderless">
+                    <thead class="thead-light">
+                        <tr>
+                            <th scope="col">Order No.</th>
+                            <th scope="col">Delivery Date</th>
+                            <th scope="col">Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let item of lastShipments; let i=index; let last=last">
+                            <td>{{ item.orderNumber }}</td>
+                            <td>{{ item.deliveryDate | date: 'MM/dd/yyyy' }}</td>
+                            <td>
+                                <a [routerLink]="['/viewshipment', item._id]" title="View Materials"><i class="fa fa-eye"></i></a>
+                                &nbsp;
+                                <a [routerLink]="['/shippedpunch', item._id]" title="View Punch List"><i class="fa fa-hand-paper-o"></i></a>
+                            </td>                     
+                        </tr>
+                    </tbody>
+                </table>
+            </ng-container>
+            <ng-template #NOLIST>
+                <h6>There are no shipments</h6>
+            </ng-template>
+            
+        </div>
+    </div>
+
+    <div class="card border-success" style="max-width: 30rem;">
+        <div class="card-header bg-success">Last Packings</div>
+        <div class="card-body text-secondary">
+            <ng-container *ngIf="lastPackings.length; else NOLISTPACKING">
+                <table class="table table-borderless">
+                    <thead class="thead-light">
+                        <tr>
+                            <th scope="col">Order No.</th>
+                            <th scope="col">Load Date</th>
+                            <th scope="col">Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let item of lastPackings; let i=index; let last=last">
+                            <td>{{ item.orderNumber }}</td>
+                            <td>{{ item.packingDate | date: 'MM/dd/yyyy' }}</td>
+                            <td>
+                                <a [routerLink]="['/viewpacking', item._id]" title="View Materials"><i class="fa fa-eye"></i></a>
+                            </td>                     
+                        </tr>
+                    </tbody>
+                </table>
+            </ng-container>
+            <ng-template #NOLISTPACKING>
+                <h6>There are no Packings</h6>
+            </ng-template>
+            
+        </div>
+    </div>
+
+    <div class="card border-success" style="max-width: 30rem;">
+        <div class="card-header bg-success">Employees</div>
+        <div class="card-body text-secondary">
+            <ng-container *ngIf="users.length; else NOLIST">
+                <table class="table table-borderless">
+                    <thead class="thead-light">
+                        <tr>
+                            <th scope="col">Name</th>
+                            <th scope="col">Role</th>
+                            <th scope="col">Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let item of users; let i=index; let last=last">
+                            <td>{{ item.lname }}, {{ item.fname }}</td>
+                            <td>{{ item.role.name }}</td>
+                            <td>
+                                <a [routerLink]="['/viewshipment', item._id]" title="View User"><i class="fa fa-eye"></i></a>
+                            </td>                     
+                        </tr>
+                    </tbody>
+                </table>
+            </ng-container>
+            <ng-template #NOLIST>
+                <h6>There are no Employees</h6>
+            </ng-template>
+            
+        </div>
+    </div>
+
+    <div class="card border-primary" style="max-width: 18rem;">
+        <div class="card-header bg-primary">Master List</div> <!––List Materials-->
+        <div class="card-body text-primary">
+            <h5 class="card-title">Materials Quantity ({{ count }})</h5>
+            <p class="card-text">
+                <a [routerLink]="['/listMaterials']">
+                    <div class="panel-footer">
+                        <span class="pull-left">View Details</span>
+                    </div>
+                </a>
+            </p>
+        </div>
+    </div>
+
+    <div class="card border-primary" style="max-width: 18rem;">
+        <div class="card-header bg-primary">Reports</div>
+        <div class="card-body text-primary">
+            <div class="list-group">
+                <a [routerLink]="['/reports/1']" class="list-group-item list-group-item-action">Material Delivered</a>
+                <a [routerLink]="['/reports/2']" class="list-group-item list-group-item-action">Diff with Master List</a>
+            </div>
+        </div>
+    </div>
+
+</div>
+</div>

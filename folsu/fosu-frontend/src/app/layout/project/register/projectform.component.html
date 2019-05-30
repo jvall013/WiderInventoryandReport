@@ -1,0 +1,130 @@
+<div class="card" style="max-width: 50rem;">
+
+    <div class="card-header text-white bg-dark">
+      <div class="d-flex justify-content-between">
+          <div>
+            Projects 
+            &nbsp;&nbsp;&nbsp;<i class="fa fa-arrow-right"></i>
+            &nbsp;&nbsp;&nbsp;{{ formTitle }}
+          </div>
+          <div>
+              <a [routerLink]="['/projects']">
+                <span class="text-white"><i class="fa fa-arrow-left"></i>&nbsp;Go back</span>
+              </a>
+          </div>
+      </div>
+    </div>
+
+    <div class="card-body">
+
+      <div *ngIf="notification.showNotices" class="alert alert-success">{{ notification.notices }}</div>
+      <div *ngIf="notification.showErrors" class="alert alert-danger">{{ notification.errors }}</div>
+      
+      <form *ngIf="editProject || formType == 'new'" [formGroup]="form">
+
+        <div class="form-group col-3">
+          <label>Code</label>
+          <input class="form-control" placeholder="Project code" formControlName="pcode">
+          <div *ngIf="!form.get('pcode').value && !form.get('pcode').pristine" class="alert alert-danger">
+            Code is require
+          </div>
+        </div>
+
+        <div class="form-group">
+            <label>Name/Description</label>
+          <input class="form-control" placeholder="Name" formControlName="name">
+          <div *ngIf="!form.get('name').value && !form.get('name').pristine" class="alert alert-danger">
+              Name is require
+          </div>
+        </div>
+
+        <div class="form-group">
+            <label>Client</label>
+          <input class="form-control" placeholder="Client" formControlName="client">
+          <div *ngIf="!form.get('client').value && !form.get('client').pristine" class="alert alert-danger">
+              Client name is require
+          </div>
+        </div>
+
+        <div class="form-group">
+            <label>Address</label>
+          <input class="form-control" placeholder="Address" formControlName="address">
+          <div *ngIf="!form.get('address').value && !form.get('address').pristine" class="alert alert-danger">
+              Address is require
+          </div>
+        </div>
+
+        <div class="form-group">
+            <label>State</label>
+          <input class="form-control" placeholder="State" formControlName="state">
+          <div *ngIf="!form.get('state').value && !form.get('state').pristine" class="alert alert-danger">
+              State is require
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="col">
+            <label>Installer</label>
+            <ng-container *ngIf="!projectId; else editLIST">
+                <select class="form-control" formControlName="installer">
+                  <option value="" disabled selected>select an Installer</option>
+                  <option *ngFor="let item of companies" [value]="item._id">{{ item.name }}</option>
+                </select>
+              </ng-container>
+              <ng-template #editLIST>
+                  <select class="form-control" formControlName="installer">
+                    <option *ngFor="let item of companies" [value]="item._id">{{ item.name }}</option>
+                  </select>
+              </ng-template>
+            
+          </div>
+        </div>
+        
+        <div class="form-row">
+            <div class="form-group col-md-3">
+                <label>Floors:</label>
+                <div class="input-group">
+                  <input formControlName="floors" type="number" class="form-control">
+                  <div *ngIf="!form.get('floors').value && !form.get('floors').pristine" class="alert alert-danger">
+                      Floors is require
+                  </div>
+                </div>
+            </div>
+        </div>
+        
+
+        <br>
+        <div class="form-group col-md-3">
+            <label>Expected Begin:</label>
+            <div class="input-group">
+              <input formControlName="expectedBegin" id="inlineFormInputName1" class="form-control" placeholder="yyyy-mm-dd"
+                        name="dp" ngbDatepicker #d="ngbDatepicker">
+              <div class="input-group-append">
+                <button class="btn btn-outline-secondary" (click)="d.toggle()" type="button"> <span class="fa fa-calendar"> </span> </button>
+              </div>
+            </div>
+        </div>
+        
+
+        <br>
+        <ng-container *ngIf="!projectId; else editBTN">
+          <button class="btn btn-primary" (click)="submit()" [disabled]="!form.valid">Register</button>
+          &nbsp;&nbsp;
+          <button class="btn btn-light" (click)="rebuildForm()">Reset</button>
+        </ng-container>
+        <ng-template #editBTN>
+            <button class="btn btn-primary" (click)="submitEdit()" [disabled]="!form.valid">Edit</button>
+        </ng-template>
+
+        <!--
+        <p>Form value: {{ form.value | json }}</p>
+        <p>Form status: {{ form.status | json }}</p>
+        <p>Name value: {{ form.get('fname').value }}</p>
+        <p>Name status: {{ form.get('fname').status }}</p>
+        -->
+
+      </form>
+  
+    </div>
+      
+</div>

@@ -1,0 +1,38 @@
+/* You can add global styles to this file, and also import other style files */
+@import '~bootstrap/dist/css/bootstrap.min.css';
+@import '../node_modules/font-awesome/css/font-awesome.css';
+
+.main-container{
+    margin-top: 60px;
+    margin-left: 235px;
+    padding: 15px;
+    -ms-overflow-x: hidden;
+    overflow-x: hidden;
+    overflow-y: scroll;
+    position: relative;
+    overflow: hidden;
+
+}
+
+@media screen and (max-width: 992px) {
+    .main-container {
+        margin-left: 0px !important;
+    }
+}
+
+@media screen and (max-width: 992px) {
+    .margin-responsive {
+        margin-bottom: 200px;
+    }
+}
+@media screen and (max-width: 2000px) {
+    .margin-responsive {
+        margin-bottom: 200px;
+    }
+}
+
+.card {
+    margin: 0 auto; /* Added */
+    float: none; /* Added */
+    margin-bottom: 10px; /* Added */
+}

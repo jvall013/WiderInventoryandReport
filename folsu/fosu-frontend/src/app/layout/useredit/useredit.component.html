@@ -1,0 +1,59 @@
+<h1>
+  User Information
+</h1>
+<div class="row">
+  <div class="col-md-2"></div>
+  <div class="col-md-8">
+
+    <div class="user" *ngIf="userList">
+      <table class="table">
+        <thead class="h">
+          <tr class="h">
+            <th class="h">First Name</th>
+            <th class="h">Last Name</th>
+            <th class="h">Department</th>
+            <th class="h">Email</th>
+            <th class="h">Role</th>
+          </tr>
+        </thead>
+        <tbody>
+          
+          <tr class="user" (dblclick)="editUser(user)" *ngFor="let user of userList">
+            <ng-container *ngIf="!edituserslist.includes(user); else editTD"> 
+              <td>{{user.fname}}</td>
+              <td>{{user.lname}}</td>
+              <td>{{user.deptid}}</td>
+              <td>{{user.email}}</td>
+              <td>{{user.role}}</td>
+            </ng-container> 
+
+            <ng-template #editTD>
+              <td><input type="text" name="fname" id="fname" (keypress)="submitUser($event, user)" [(ngModel)]="user.fname" placeholder="First Name" class="form-control"></td>
+              <td><input type="text" name="lname" id="lname" (keypress)="submitUser($event, user)" [(ngModel)]="user.lname" placeholder="Last Name" class="form-control"></td>
+              <td><input type="text" name="deptid" id="deptid" (keypress)="submitUser($event, user)" [(ngModel)]="user.deptid" placeholder="Department" class="form-control"></td>
+              <td><input type="text" name="email" id="email" (keypress)="submitUser($event, user)" [(ngModel)]="user.email" placeholder="email" class="form-control"></td>
+              <td><input type="text" name="role" id="role" (keypress)="submitUser($event, user)" [(ngModel)]="user.role" placeholder="role" class="form-control"></td>
+            </ng-template>
+
+            <td class="o"> 
+              <button class="btn btn-success" (click)="doneUser(user)">
+                <i  class="fa fa-check"></i>
+              </button>
+              <button class="btn btn-primary" (click)="editUser(user)">
+                  <i  class="fa fa-pencil"></i>
+                </button>
+              <button class="btn btn-danger" (click)="deleteUser(user)">
+                  <i  class="fa fa-trash"></i>
+                </button>
+            </td>
+
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+
+  
+    
+  </div>
+</div>

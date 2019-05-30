@@ -1,0 +1,164 @@
+<nav class="sidebar" [ngClass]="{sidebarPushRight: isActive}">
+    <ul class="list-group">
+        <a routerLink="/home" [routerLinkActive]="['router-link-active']" class="list-group-item">
+            <i class="fa fa-fw fa-home"></i>&nbsp;home
+        </a>
+
+        <div class="nested-menu" *ngIf='auth.isAuthenticated'>
+            <a [routerLink]="['/dailyreport']" class="list-group-item">
+                <span>
+                    <i class="fa fa-calendar-o"></i>&nbsp; Daily Report
+                </span>
+            </a>
+        </div>
+
+        <div class="nested-menu" *ngIf='auth.isAuthenticated && (auth.role === "FORMER" || auth.role === "ADMIN" )'>
+            <a [routerLink]="['/shippedlist']" class="list-group-item">
+                <span>
+                    <i class="fa fa-truck"></i>&nbsp; Delivery
+                </span>
+            </a>
+        </div>
+
+        <div class="nested-menu" *ngIf='auth.isAuthenticated && auth.role === "ADMIN"'>
+            <a [routerLink]="['/packinglist']" class="list-group-item">
+                <span>
+                    <i class="fa fa-truck"></i>&nbsp; Packing List
+                </span>
+            </a>
+        </div>
+
+        <div class="nested-menu" *ngIf='auth.isAuthenticated && auth.role === "ADMIN"'>
+            <a [routerLink]="['/projects']" class="list-group-item">
+                <span>
+                    <i class="fa fa-line-chart"></i>&nbsp; Projects
+                </span>
+            </a>
+        </div>
+
+        <div class="nested-menu" *ngIf='auth.isAuthenticated && auth.role === "ADMIN"'>
+            <a [routerLink]="['/materials']" class="list-group-item">
+                <span>
+                    <i class="fa fa-cubes"></i>&nbsp; Materials
+                </span>
+            </a>
+        </div>
+
+
+        <div class="nested-menu" *ngIf='auth.isAuthenticated && auth.role === "ADMIN"'>
+            <a class="list-group-item" (click)="addExpandClass('upload')">
+                <span>
+                    <i class="fa fa-address-book"></i>&nbsp; Users
+                </span>
+            </a>
+            <li class="nested" [class.expand]="showMenu === 'upload'">
+                <ul class="submenu">
+                    <li>
+                        <a [routerLink]="['/register']" [routerLinkActive]="['router-link-active']" class="list-group-item">
+                            <i class="fa fa-plus"></i>&nbsp;Register
+                        </a>
+                    </li>
+                    <li>
+                        <a [routerLink]="['/users']" [routerLinkActive]="['router-link-active']" class="list-group-item">
+                            <i class="fa fa-eye"></i>&nbsp;View
+                        </a>
+                    </li>
+                </ul>
+            </li>
+        </div>
+
+        <div class="nested-menu">
+            <a class="list-group-item" (click)="addExpandClass('account')">
+                <span *ngIf="!auth.isAuthenticated">
+                    <i class="fa fa-user"></i>&nbsp;My Profile
+                </span>
+                <span *ngIf="auth.isAuthenticated">
+                    <i class="fa fa-user"></i>&nbsp; Welcome - {{auth.name}}
+                </span>
+            </a>
+            <li class="nested" [class.expand]="showMenu === 'account'">
+                <ul class="submenu">
+                    <li>
+                        <div *ngIf="!auth.isAuthenticated">
+                            <!--<a class="list-group-item" (click)="open(content)">-->
+                            <a [routerLink]="['/login']" class="list-group-item">
+                                <i class="fa fa-fw fa-keyboard-o"></i>&nbsp;Login
+                            </a>
+                        </div>
+                        <div *ngIf="auth.isAuthenticated">
+                            <a [routerLink]="['/account']" [routerLinkActive]="['router-link-active']" class="list-group-item">
+                                <i class="fa fa-fw fa-address-card"></i>&nbsp;My Profile
+                            </a>
+                            <a [routerLinkActive]="['router-link-active']" class="list-group-item" (click)="auth.logout()">
+                                <i class="fa fa-fw fa-keyboard-o"></i>&nbsp;Log Out
+                            </a>
+                        </div>
+                    </li>
+                </ul>
+            </li>
+        </div>
+
+    </ul>
+
+    <!--This is the modal for Login-->
+    <ng-template #content let-c="close" let-d="dismiss">
+        <div class="modal-header">
+            <h4>
+                Login!
+            </h4>
+            <button type="button" class="close" aria-label="Close" (click)="d('Cross click')">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        <div class="modal-body">
+            <div class="row">
+                <form role="form" id="form" >
+                    <div class="form-content">
+                        <div class="form-group">
+                            <div>
+                                <strong>User Name:</strong>
+                            </div>
+                            <input type="text" [(ngModel)]="loginUser" class="form-control input-underline input-lg"
+                                   name="user" placeholder="Enter User Name" />
+
+                        </div>
+                        <div class="form-group">
+                            <div>
+                                <strong>Password:</strong>
+                            </div>
+                            <input type="password" [(ngModel)]="loginPassword" class="form-control input-underline input-lg"
+                                   name="password" placeholder="Enter Password" />
+
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button routerLink="/dashboard" [routerLinkActive]="['router-link-active']"
+                                class="btn btn-primary btn-block" (click)="getUser(loginError); c('Close click')" type="submit">
+                            login
+                        </button>
+                        &nbsp;
+                    </div>
+                </form>
+            </div>
+        </div>
+    </ng-template>
+
+    <!--This is the modal for register warning-->
+    <ng-template #loginError let-c="close" let-d="dismiss">
+        <div class="modal-header">
+            <h4>
+                Password Error<i class="fa fa-fw fa-exclamation"></i>
+            </h4>
+            <button type="button" class="close" aria-label="Close" (click)="d('Cross click')">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        <div class="modal-body">
+            <!--Alert-->
+            <div class="alert alert-warning">
+                <strong>Password did not match! </strong> Please try again.
+            </div>
+        </div>
+    </ng-template>
+
+</nav>

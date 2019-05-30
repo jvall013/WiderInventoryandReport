@@ -1,0 +1,141 @@
+<h3>Reporte Diario</h3>
+<br>
+<div class="row">
+    <div class="col">
+      <strong>Fecha: </strong> 
+      <ng-container *ngIf="!editDate; else EDITDATE">
+        <a (click)="editReportDate()" style="cursor: pointer;">
+          {{ reportedAt | date: 'longDate' }}
+        </a>
+      </ng-container>
+      <ng-template #EDITDATE>
+          <form [formGroup]="form_date">
+            <div class="form-group col-md-3">
+              <div class="input-group">
+                <input style="max-width: 140px;" formControlName="reportDate" id="inlineFormInputName1" class="form-control" placeholder="yyyy-mm-dd"
+                          name="dp" ngbDatepicker #d="ngbDatepicker">
+                <div class="input-group-append">
+                  <button class="btn btn-outline-secondary" (click)="d.toggle()" type="button"> <span class="fa fa-calendar"> </span> </button>
+                </div>
+              </div>
+            </div>
+            <button class="btn btn-primary" (click)="saveReportDate()" [disabled]="!form_date.valid">Save</button>
+          </form>
+      </ng-template>
+    </div>
+</div>
+<br>
+<h5>Reporte de Avance de Obra</h5>
+
+<div *ngFor="let number of numbers; let i=index" class="card">
+  <div class="card-header bg-info">
+    <strong>Piso {{ number }}</strong>
+  </div>
+  <div class="card-body">
+    <div *ngIf="(floor == number) && show[i]">
+      <form [formGroup]="form" class="form">
+          <div class="form-group">
+            <label>Seleccione una actividad programada:</label>
+            <ng-select formControlName="activity" placeholder="Select activity">
+                <ng-option *ngFor="let item of activitiesByFloor[i].timeline" [value]="item.activity">{{ item.activity }}</ng-option>
+            </ng-select>
+          </div>
+          <div class="form-group">
+            <label><strong>Detalles: </strong> Coloque cada trabajador con las actividades que ejecut&oacute;</label>
+            <textarea formControlName="description" class="form-control" rows="3"></textarea>
+            <div *ngIf="!form.get('description').value && !form.get('description').pristine" class="alert alert-danger">
+                El detalle de la Actividad es requerido
+            </div>
+          </div>
+          <button type="submit" (click)="addActivity(number)" class="btn btn-primary mb-2" [disabled]="!form.valid">Add</button>
+      </form>
+    </div>
+
+    <button *ngIf="!show[i]" (click)="showForm(number)" type="button" style="text-decoration: none;" class="btn btn-link">
+        <i class="fa fa-plus-square-o"></i>&nbsp;Agregar reporte
+    </button>
+    <button *ngIf="hideNew[i]" (click)="hideForm(number)" type="button" style="text-decoration: none;" class="btn btn-link">
+        <i class="fa fa-minus-square-o"></i>&nbsp;Ocultar
+    </button>
+
+    <ng-container *ngFor="let item of reportByFloor; let j = index">
+      <ng-container *ngIf="i == j">
+        <ng-container *ngIf="item.length; else noLIST">
+
+            <table class="table table-hover">
+              <thead class="thead-light">
+                <tr>
+                  <th scope="col">
+                    Activity
+                  </th>
+                  <th scope="col">
+                    Description
+                  </th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let act of item;">
+                  <td>{{ act.activity }}</td>
+                  <td>{{ act.description }}</td>
+                  <td>
+                    <a (click)="delete()" style="cursor: pointer;">
+                        <i class="fa fa-trash-o"></i>
+                    </a>
+                  </td>   
+                </tr>
+              </tbody>        
+          </table>
+
+        </ng-container>
+        <ng-template #noLIST>
+            No hay reportes en este piso
+        </ng-template>
+      </ng-container>
+  </ng-container>
+  </div>
+</div>
+<br><br>
+<h5>Reporte de Horas</h5>
+
+<form [formGroup]="form_hours" class="form">
+  <table class="table table-hover">
+      <thead class="thead-dark">
+        <tr>
+          <th scope="col">
+            Trabajador
+          </th>
+          <th scope="col">
+            Horas
+          </th>
+          <th scope="col">
+            Observaciones
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let user of users;let i=index;">
+          <td>{{ user.lname }}, {{ user.fname }}</td>
+          <td>
+            <input class="form-control" formControlName="hours{{ i }}" type="number" style="max-width: 140px;">
+            <div *ngIf="form_hours.get('hours' + i).status == 'INVALID' && !form_hours.get('hours' + i).pristine" class="alert alert-danger">
+                Debe introducir un n&uacute;mero v&aacute;lido.
+            </div>
+          </td>
+          <td>
+            <input class="form-control" formControlName="description{{ i }}" type="text">
+          </td>
+        </tr>
+      </tbody>        
+  </table>
+
+  <!--
+  <p>Form value: {{ form_hours.value | json }}</p>
+  <p>Form status: {{ form_hours.status | json }}</p>
+  -->
+  <div *ngIf="notification.showNotices" class="alert alert-success">{{ notification.notices }}</div>
+  <div *ngIf="notification.showErrors" class="alert alert-danger">{{ notification.errors }}</div>
+  <br>
+  <button type="button" (click)="sendReport()" class="btn btn-primary mb-2">Enviar Reporte</button>
+</form>
+

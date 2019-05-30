@@ -1,0 +1,103 @@
+<h5>Users</h5>
+
+<div *ngIf="editForm" class="card">
+  <div class="card-body">
+      <div *ngIf="notification.showNotices" class="alert alert-success">{{ notification.notices }}</div>
+      <div *ngIf="notification.showErrors" class="alert alert-danger">{{ notification.errors }}</div>
+    <form [formGroup]="form" class="form">
+
+        <div class="form-group">
+            <input class="form-control" placeholder="First name" formControlName="fname">
+            <div *ngIf="!form.get('fname').value && !form.get('fname').pristine" class="alert alert-danger">
+                First name is require
+            </div>
+        </div>
+        <div class="form-group">
+            <input class="form-control" placeholder="Last Name" formControlName="lname">
+            <div *ngIf="!form.get('lname').value && !form.get('lname').pristine" class="alert alert-danger">
+                Last name is require
+            </div>
+        </div>
+        <div class="form-group">
+            <input class="form-control" placeholder="Email" type="email" formControlName="email">
+            <div *ngIf="!form.get('email').value && !form.get('email').pristine" class="alert alert-danger">
+                Email is require
+            </div>
+            <div *ngIf="form.get('email').errors?.email && !form.get('email').pristine" class="alert alert-danger" >
+                Email not valid.
+            </div>
+        </div>
+        <div class="form-group">
+            <input class="form-control" placeholder="Salary" type="number" formControlName="salary" style="max-width: 140px;">
+            <div *ngIf="!form.get('salary').value && !form.get('salary').pristine" class="alert alert-danger">
+                Salary is require
+            </div>
+        </div>
+        <div class="form-row">
+            <div class="col">
+                <select class="form-control" formControlName="role">
+                <option value="" disabled selected>select a role</option>
+                <option *ngFor="let item of roles" [value]="item._id">{{ item.name }}</option>
+                </select>
+            </div>
+            <div class="col">
+                <select class="form-control" formControlName="company">
+                <option value="" disabled selected>select a company</option>
+                <option *ngFor="let item of companies" [value]="item._id">{{ item.name }}</option>
+                </select>
+            </div>
+        </div>
+        <br>
+        <div class="row">
+            <div class="col-md-6">
+                <label>Project</label>
+                <select class="form-control" formControlName="project">
+                <option *ngFor="let item of projects" [value]="item._id">{{ item.name }}</option>
+                </select>
+            </div>
+        </div>
+        <br>
+        <button type="submit" (click)="submit()" class="btn btn-primary mb-2" [disabled]="!form.valid">Save</button>
+        <button (click)="hideForm()" type="button" style="text-decoration: none;" class="btn btn-link">
+            <i class="fa fa-minus-square-o"></i>&nbsp;Hide form
+        </button>
+    </form>
+  </div>
+</div>
+
+<br>
+
+<table style="font-size: 14px;" datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger" class="table table-sm table-hover">
+  <thead class="thead-dark">
+    <tr>
+      <th scope="col">
+        #
+      </th>
+      <th scope="col">
+        First Name
+      </th>
+      <th scope="col">
+        Last Name
+      </th>
+      <th>Actions</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let item of list; let i=index; let last=last">
+      <th scope="row">{{ i + 1 }}</th>
+      <td>{{ item.fname }}</td>
+      <td>{{ item.lname }}</td>
+      <td>
+        <div class="btn-group" role="group">
+          <button style="font-size: 2px;" (click)="toUpdateUser(item._id)" class="btn btn-primary">
+              <i style="font-size: 10px;" class="fa fa-pencil"></i>
+          </button>
+          <!--<button style="font-size: 2px;"  class="btn btn-danger" (click)="delete(item)">
+              <i style="font-size: 10px;"  class="fa fa-trash-o"></i>
+          </button>-->
+        </div>
+      </td>
+    </tr>
+  </tbody>
+  
+</table>

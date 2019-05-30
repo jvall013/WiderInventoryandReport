@@ -1,0 +1,105 @@
+
+
+  <h3>Shipped List at {{ created_at | date: 'MM/dd/yyyy' }}</h3>
+  <button (click)="backClicked()" type="button" class="btn btn-link">Back</button>
+  
+      <div *ngIf="notification.showNotices" class="alert alert-success">{{ notification.notices }}</div>
+      <div *ngIf="notification.showErrors" class="alert alert-danger">{{ notification.errors }}</div>
+
+        <div class="row">
+          <div class="container">
+              <div class="card" style="display: inline-block;max-width: 20rem;">
+                <div class="card-header">
+                  Project: <a (click)="editProject()" style="cursor: pointer;"><i class="fa fa-pencil"></i></a>
+                </div>
+                <div class="card-body">
+                  <ng-container *ngIf="!editP; else EDITPROJECT">
+                    {{ projectName }}
+                  </ng-container>
+                  <ng-template #EDITPROJECT>
+                      <form [formGroup]="form1">
+                          <select formControlName="project" class="form-control mb-2 mr-sm-2">
+                            <option *ngFor="let item of projects" [value]='item._id + "|" + item.name'>{{ item.name }}</option>
+                          </select>
+                      </form>
+                  </ng-template>
+                </div>
+              </div>
+              <div style="display: inline-block;">
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+              </div>
+              <div class="card mt-3" style="display: inline-block; max-width: 18rem;">
+                <div class="card-header">
+                  Order: <a (click)="editOrder()" style="cursor: pointer;"><i class="fa fa-pencil"></i></a>
+                </div>
+                <div class="card-body">
+                    <ng-container *ngIf="!editO; else EDITORDER">
+                      {{ orderCode }}
+                    </ng-container>
+                    <ng-template #EDITORDER>
+                        <form [formGroup]="form1">
+                          <input (keypress)="keyPress($event)" formControlName="order" type="text">
+                          <div *ngIf="!form1.get('order').value && !form1.get('order').pristine" class="alert alert-danger">
+                              Order is require
+                          </div>
+                        </form>
+                    </ng-template>
+                </div>
+              </div>
+          </div>
+        </div>
+        
+        <div class="card">
+          <div class="card-header">
+            <small>* Add Line and Quantity of each label (Agregue la linea y cantidad de cada etiqueta)</small>
+          </div>
+          <div class="card-body">
+            <form [formGroup]="form2" class="form-inline">
+              <label class="sr-only" for="inlineFormInputLine">Line:</label>
+              <input formControlName="line" type="number" class="form-control mb-2 mr-sm-2" id="inlineFormInputLine" placeholder="Line number">
+              <div *ngIf="!form2.get('line').value && !form2.get('line').pristine" class="alert alert-danger">
+                  Line number is require
+              </div>
+              <label class="sr-only" for="inlineFormInputQuantity">Quantity:</label>
+              <input formControlName="quantity" type="number" class="form-control mb-2 mr-sm-2" id="inlineFormInputQuantity" placeholder="Quantity">
+              <div *ngIf="!form2.get('quantity').value && !form2.get('quantity').pristine" class="alert alert-danger">
+                  Quantity is require
+              </div>
+              <button type="submit" (click)="addLine()" class="btn btn-primary mb-2" [disabled]="!form2.valid">Add</button>
+            </form>
+          </div>
+        </div>
+  
+        <table style="font-size: 14px;" class="table table-hover">
+            <thead class="thead-dark">
+              <tr>
+                <th scope="col">
+                  #
+                </th>
+                <th scope="col">
+                  Line
+                </th>
+                <th scope="col">
+                  Quantity
+                </th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let item of list; let i=index; let last=last">
+                <th scope="row">{{ i + 1 }}</th>
+                <td>{{ item.line }}</td>
+                <td>{{ item.quantity | number }}</td>
+                <td>
+                  <a (click)="delete(i)" style="cursor: pointer;">
+                      <i class="fa fa-trash-o"></i>
+                  </a>
+                </td>
+              </tr>
+            </tbody>
+            
+          </table>
+  
+          <button type="submit" (click)="updateOrder()" class="btn btn-primary mb-2" [disabled]="!list.length">Update Order</button>
+  

@@ -1,0 +1,36 @@
+<h2>Projects</h2>
+<div class="row">
+    <div class="col text-right"><a [routerLink]="['/projects/new']">New project</a></div>
+</div>
+<table style="font-size: 14px;" datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger" class="table table-sm table-hover">
+  <thead class="thead-dark">
+    <tr>
+      <th scope="col" *ngFor="let col of columns">
+        {{col}}
+      </th>
+      <th>Actions</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let item of list; let i=index; let last=last">
+      <th scope="row">{{ i + 1 }}</th>
+      <td><a [routerLink]="['/summary', item._id]">{{ item.pcode }}</a></td>
+      <td>{{ item.name }}</td>
+      <td>{{ item.address }}</td>
+      <td>
+        <div class="btn-group" role="group">
+          <button style="font-size: 2px;" [routerLink]="['/projects/edit', item._id]" class="btn btn-primary">
+              <i style="font-size: 10px;" class="fa fa-pencil"></i>
+          </button>
+          <button style="font-size: 2px;"  class="btn btn-danger" (click)="delete(item)">
+              <i style="font-size: 10px;"  class="fa fa-trash-o"></i>
+          </button>
+          <button style="font-size: 2px;" [routerLink]="['/projects/timeline', item._id]" class="btn btn-success">
+            <i style="font-size: 10px;" class="fa fa-calendar"></i>
+          </button>
+        </div>
+      </td>
+    </tr>
+  </tbody>
+  
+</table>

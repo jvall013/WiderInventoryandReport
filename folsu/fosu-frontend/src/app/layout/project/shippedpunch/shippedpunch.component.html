@@ -1,0 +1,95 @@
+
+<h4>Generate Punch List from Shipment</h4>
+<button (click)="backClicked()" type="button" class="btn btn-link">Back</button> 
+<div *ngIf="notification.showNotices" class="alert alert-success">{{ notification.notices }}</div>
+<div *ngIf="notification.showErrors" class="alert alert-danger">{{ notification.errors }}</div>
+
+<ng-container *ngIf="showForm1; else noFORM1">
+
+  <div class="card">
+    <div class="card-header">
+      <small>* Provide an Order Number to see the Shipment Punch List (Ingrese un numero de Orden para ver la Lista Punch de un envio)</small>
+    </div>
+    <div class="card-body">
+
+      <form [formGroup]="form1" class="form-inline">
+        <label class="sr-only" for="inlineFormInputOrder">Order:</label>
+        <input (keypress)="keyPress($event)" formControlName="order" type="text" class="form-control mb-2 mr-sm-2" id="inlineFormInputOrder" placeholder="Order number">
+        <div *ngIf="!form1.get('order').value && !form1.get('order').pristine" class="alert alert-danger">
+          Order is require
+        </div>
+        <button type="submit" (click)="addOrder()" class="btn btn-primary mb-2" [disabled]="!form1.valid">Add</button>
+      </form>
+    </div>
+  </div>
+
+</ng-container>
+
+<ng-template #noFORM1>
+  <div class="container">
+    <div class="row">
+        <div class="col-md-8">
+          <div class="card" style="max-width: 18rem;">
+            <div class="card-header">
+              Order number: <a (click)="reloadOrder()" style="cursor: pointer;"><i class="fa fa-refresh"></i></a>
+            </div>
+            <div class="card-body">
+              {{ orderCode }}
+            </div>
+          </div>
+        </div>
+        <ng-container *ngIf="punchlist.length">
+          <div class="col-md-4">
+            <div class="card" style="max-width: 10rem;">
+              <div class="card-header">Options:</div>
+              <div class="card-body">
+                  <a (click)="downloadPDF()" style="cursor: pointer;"><i class="fa fa-file-pdf-o"></i></a>
+                  <i class="fa fa-print"></i>
+              </div>
+            </div>
+          </div>
+        </ng-container>
+        
+    </div>
+  </div>
+
+  <ng-container *ngIf="punchlist.length || notification.showErrors; else NOITEMS">
+
+    <table style="font-size: 14px;" class="table table-hover">
+      <thead class="thead-dark">
+        <tr>
+          <th scope="col">
+            #
+          </th>
+          <th scope="col">
+            Line
+          </th>
+          <th scope="col">
+            Material
+          </th>
+          <th scope="col">
+            Missing
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let item of punchlist; let i=index; let last=last">
+          <th scope="row">{{ i + 1 }}</th>
+          <td>{{ item.line }}</td>
+          <td>{{ item.material }}</td>
+          <td>{{ item.differ | number }}</td>
+        </tr>
+      </tbody>
+      
+    </table>
+
+  </ng-container>
+  <ng-template #NOITEMS>
+      <p class="text-center"><strong>All materials arrived</strong></p>
+  </ng-template>
+  
+  
+</ng-template>
+
+
+

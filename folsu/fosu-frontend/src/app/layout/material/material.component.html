@@ -1,0 +1,51 @@
+<h5>Materials</h5>
+
+<div class="card">
+  <div class="card-body">
+      <div *ngIf="notification.showNotices" class="alert alert-success">{{ notification.notices }}</div>
+      <div *ngIf="notification.showErrors" class="alert alert-danger">{{ notification.errors }}</div>
+    <form *ngIf="editMaterial || formType == 'new'" [formGroup]="form" class="form">
+
+      <label for="inlineFormInputDescription"></label>
+      <input formControlName="description" type="text" class="form-control" id="inlineFormInputDescription">
+      <div *ngIf="!form.get('description').value && !form.get('description').pristine" class="alert alert-danger">
+          Description is require
+      </div>
+      <br>
+      <button type="submit" (click)="submit()" class="btn btn-primary mb-2" [disabled]="!form.valid">Save</button>
+    </form>
+  </div>
+</div>
+
+<br>
+
+<table style="font-size: 14px;" datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger" class="table table-sm table-hover">
+  <thead class="thead-dark">
+    <tr>
+      <th scope="col">
+        #
+      </th>
+      <th scope="col">
+        Description
+      </th>
+      <th>Actions</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let item of list; let i=index; let last=last">
+      <th scope="row">{{ i + 1 }}</th>
+      <td>{{ item.description }}</td>
+      <td>
+        <div class="btn-group" role="group">
+          <button style="font-size: 2px;" [routerLink]="['/materials/edit', item._id]" class="btn btn-primary">
+              <i style="font-size: 10px;" class="fa fa-pencil"></i>
+          </button>
+          <button style="font-size: 2px;"  class="btn btn-danger" (click)="delete(item)">
+              <i style="font-size: 10px;"  class="fa fa-trash-o"></i>
+          </button>
+        </div>
+      </td>
+    </tr>
+  </tbody>
+  
+</table>

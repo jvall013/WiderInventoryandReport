@@ -1,0 +1,84 @@
+<h2>Master List of Materials</h2>
+
+<div *ngIf="showNew" class="card">
+    <div class="card-body">
+        <div *ngIf="notification.showNotices" class="alert alert-success">{{ notification.notices }}</div>
+        <div *ngIf="notification.showErrors" class="alert alert-danger">{{ notification.errors }}</div>
+      <form [formGroup]="form" class="form">
+        <ng-select formControlName="material" placeholder="Select material">
+            <ng-option *ngFor="let item of materials" [value]="item._id">{{ item.description }}</ng-option>
+        </ng-select>
+
+        <!--<select formControlName="material" class="form-control mb-2 mr-sm-2">
+          <option value="" disabled selected>select material</option>
+          <option *ngFor="let item of materials" [value]="item._id">{{ item.description }}</option>
+        </select>-->
+        <br>
+        <input formControlName="quantity" type="number" class="form-control mb-2 mr-sm-2" id="inlineFormInputNumber" placeholder="Quantity">
+        <div *ngIf="!form.get('quantity').value && !form.get('quantity').pristine" class="alert alert-danger">
+            Quantity is require
+        </div>
+        <input type="hidden" formControlName="project" />
+        <button type="submit" (click)="addMaterial()" class="btn btn-primary mb-2" [disabled]="!form.valid">Add</button>
+      </form>
+    </div>
+</div>
+
+<div class="d-flex justify-content-between">
+    <div>
+        <a [routerLink]="['/summary', projectId]">
+          <i class="fa fa-arrow-left"></i>&nbsp;Go back
+        </a>
+    </div>
+    <div>
+        <button *ngIf="!showNew" (click)="newForm()" type="button" style="text-decoration: none;" class="btn btn-link">
+            <i class="fa fa-plus-square-o"></i>&nbsp;New Material
+        </button>
+        <button *ngIf="hideNew" (click)="hideForm()" type="button" style="text-decoration: none;" class="btn btn-link">
+            <i class="fa fa-minus-square-o"></i>&nbsp;Hide form
+        </button>
+    </div>
+</div>
+
+<ng-container *ngIf="list; else noLIST">
+
+    <table class="table table-hover">
+      <thead class="thead-dark">
+        <tr>
+          <th scope="col" *ngFor="let col of columns">
+            {{col}}
+          </th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr (dblclick)="editItem(item)" *ngFor="let item of list; let i=index; let last=last">
+          <th scope="row">{{ i + 1 }}</th>
+          <td>{{ item.material.description }}</td>
+          <ng-container *ngIf="!editList.includes(item); else editTD">
+            <td>{{ item.quantity | number }}</td>
+          </ng-container>
+    
+          <ng-template #editTD>
+            <td>
+              <div class="col-4">
+                  <input type="number" name="quantity" id="quantity" (keypress)="submitItem($event, item)" [(ngModel)]="item.quantity" placeholder="Quantity" class="form-control">
+              </div>
+            </td>
+          </ng-template>
+    
+          <td>
+            <a (click)="delete(item)" style="cursor: pointer;">
+                <i class="fa fa-trash-o"></i>
+            </a>
+          </td>   
+        </tr>
+      </tbody>
+      
+    </table>
+
+</ng-container>
+
+<ng-template #noLIST>
+  <h6>No data found</h6>
+</ng-template>

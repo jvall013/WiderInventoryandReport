@@ -1,0 +1,38 @@
+<h2>{{ title }}</h2>
+
+<button (click)="backClicked()" type="button" class="btn btn-link">Back</button>
+
+<table *ngIf="type==1" class="table table-hover">
+    <thead class="thead-dark">
+        <tr>
+            <th *ngFor="let column of columns;" scope="col">{{ column }}</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr *ngFor="let item of list | sortBy : 'quantity'; let i=index; let last=last">
+            <th scope="row">{{ i + 1 }}</th>
+            <td *ngFor="let prop of row"> {{ item[prop] }} </td>
+        </tr>
+    </tbody>   
+</table>
+
+<table *ngIf="type==2" class="table table-hover">
+        <thead class="thead-dark">
+            <tr>
+                <th *ngFor="let column of columns;" scope="col">{{ column }}</th>
+            </tr>
+        </thead>
+        <tbody>
+            <!--PONER LOS CAMPOS PERSONALIZADOS-->
+            <tr *ngFor="let item of list | sortBy : 'quantity'; let i=index; let last=last">
+                <th scope="row">{{ i + 1 }}</th>
+                <td *ngFor="let prop of row"> {{ item[prop] }} </td>
+            </tr>
+        </tbody>   
+    </table>
+
+<p appHighlight></p>
+
+<p [appHighlight]="color"></p>
+
+{{value | maxLength : 30}}
